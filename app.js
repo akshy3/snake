@@ -31,7 +31,7 @@
 
         // Draw snake
         for (let i = 0; i < snake.length; i++) {
-          ctx.fillStyle = i === 0 ? "white" : "white";
+          ctx.fillStyle = i === 0 ? "white" : "yellow";
           ctx.fillRect(snake[i].x, snake[i].y, box, box);
 
           ctx.strokeStyle = "white";
