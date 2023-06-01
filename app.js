@@ -31,8 +31,6 @@
 
         // Draw snake
         for (let i = 0; i < snake.length; i++) {
-        //   ctx.fillStyle = "yellow"
-        //   ctx.fillRect(0,0, canvas.width, canvas.height)
           ctx.fillStyle = i === 0 ? "white" : "white";
           ctx.fillRect(snake[i].x, snake[i].y, box, box);
 
