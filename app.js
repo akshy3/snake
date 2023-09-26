@@ -1,12 +1,19 @@
 let canvas = document.getElementById("canvas");
 let canvasContext = canvas.getContext("2d");
 
+const BOARD_SIZE = 30;
+if (window.innerWidth > window.innerHeight) {
+  canvas.height= window.innerHeight-(window.innerHeight % BOARD_SIZE)
+  canvas.width= canvas.height;
+} else {
+  canvas.width = window.innerWidth;
+  canvas.height = canvas.width;
+}
 let welcomeDiv = document.getElementById("welcome-screen");
 let playButton = document.getElementById("play-button");
 let eatSound = new Audio("./assets/eat-sound.wav");
 let gameOverSound = new Audio("./assets/game-over-sound.wav");
 
-const BOARD_SIZE = 30;
 const ONE_BLOCK = canvas.width / BOARD_SIZE;
 let snake;
 let food;
@@ -25,7 +32,7 @@ function initialization() {
   ];
   snakeLength = 0;
   fps = 80;
-  direction=null;
+  direction = null;
 }
 
 function randomizeFood() {
@@ -89,6 +96,21 @@ function handleKeyDown(e) {
     direction = "right";
   }
 }
+const oppositeDirection = (dir)=>{
+  switch (dir) {
+    case 'up': return 'down';
+      case 'down': return 'up'
+      case 'left': return 'right'
+      case 'right': return 'left'
+    default:
+      return null;
+  }
+}
+function handleSwipe(e){
+  if(e.detail.dir !=oppositeDirection(direction)){
+  direction=e.detail.dir;
+  }
+}
 
 function move() {
   snakePrevX = snake[0].x;
@@ -130,6 +152,7 @@ function startGame() {
   canvas.style.display = "block";
   welcomeDiv.style.display = "none";
   document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener('swiped',handleSwipe)
   randomizeFood();
   game = setInterval(gameLoop, fps);
 }
@@ -138,13 +161,13 @@ function welcomeScreen() {
   welcomeDiv.style.display = "block";
 }
 
-async function gameOver () {
+async function gameOver() {
   clearInterval(game);
   gameOverSound.play();
-  await new Promise(r => setTimeout(r, 500));
+  await new Promise((r) => setTimeout(r, 500));
 
-  
   alert("game over!");
   document.removeEventListener("keydown", handleKeyDown);
+  document.removeEventListener('swiped',handleSwipe)
   welcomeScreen();
 }
