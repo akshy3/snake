@@ -2,8 +2,8 @@ let canvas = document.getElementById("canvas");
 let canvasContext = canvas.getContext("2d");
 
 const BOARD_SIZE = 30;
-let windowWidth = window.innerWidth - 1;
-let windowHeight = window.innerHeight - 1;
+let windowWidth = window.innerWidth - 3;
+let windowHeight = window.innerHeight - 3;
 
 if (window.innerWidth > window.innerHeight) {
   canvas.height = windowHeight - (windowHeight % BOARD_SIZE);
