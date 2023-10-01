@@ -3,10 +3,10 @@ let canvasContext = canvas.getContext("2d");
 
 const BOARD_SIZE = 30;
 if (window.innerWidth > window.innerHeight) {
-  canvas.height= window.innerHeight-(window.innerHeight % BOARD_SIZE)
-  canvas.width= canvas.height;
+  canvas.height = window.innerHeight - (window.innerHeight % BOARD_SIZE);
+  canvas.width = canvas.height;
 } else {
-  canvas.width = window.innerWidth;
+  canvas.width = window.innerWidth - (window.innerWidth % BOARD_SIZE);
   canvas.height = canvas.width;
 }
 let welcomeDiv = document.getElementById("welcome-screen");
@@ -96,19 +96,23 @@ function handleKeyDown(e) {
     direction = "right";
   }
 }
-const oppositeDirection = (dir)=>{
+const oppositeDirection = (dir) => {
   switch (dir) {
-    case 'up': return 'down';
-      case 'down': return 'up'
-      case 'left': return 'right'
-      case 'right': return 'left'
+    case "up":
+      return "down";
+    case "down":
+      return "up";
+    case "left":
+      return "right";
+    case "right":
+      return "left";
     default:
       return null;
   }
-}
-function handleSwipe(e){
-  if(e.detail.dir !=oppositeDirection(direction)){
-  direction=e.detail.dir;
+};
+function handleSwipe(e) {
+  if (e.detail.dir != oppositeDirection(direction)) {
+    direction = e.detail.dir;
   }
 }
 
@@ -152,7 +156,7 @@ function startGame() {
   canvas.style.display = "block";
   welcomeDiv.style.display = "none";
   document.addEventListener("keydown", handleKeyDown);
-  document.addEventListener('swiped',handleSwipe)
+  document.addEventListener("swiped", handleSwipe);
   randomizeFood();
   game = setInterval(gameLoop, fps);
 }
@@ -168,6 +172,6 @@ async function gameOver() {
 
   alert("game over!");
   document.removeEventListener("keydown", handleKeyDown);
-  document.removeEventListener('swiped',handleSwipe)
+  document.removeEventListener("swiped", handleSwipe);
   welcomeScreen();
 }
