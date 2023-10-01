@@ -2,11 +2,14 @@ let canvas = document.getElementById("canvas");
 let canvasContext = canvas.getContext("2d");
 
 const BOARD_SIZE = 30;
+let windowWidth = window.innerWidth - 1;
+let windowHeight = window.innerHeight - 1;
+
 if (window.innerWidth > window.innerHeight) {
-  canvas.height = window.innerHeight - (window.innerHeight % BOARD_SIZE);
+  canvas.height = windowHeight - (windowHeight % BOARD_SIZE);
   canvas.width = canvas.height;
 } else {
-  canvas.width = window.innerWidth - (window.innerWidth % BOARD_SIZE);
+  canvas.width = windowWidth - (windowWidth % BOARD_SIZE);
   canvas.height = canvas.width;
 }
 let welcomeDiv = document.getElementById("welcome-screen");
@@ -22,7 +25,16 @@ let direction;
 let fps = 80;
 let snakePrevX, snakePrevY;
 let game;
+let isGameover = true;
+let playerHighscore = 0;
+//
+let lastFrameTime = 0;
+// const FRAME_INTERVAL = 1000 / 15; // 15 frames per second
+const FRAME_INTERVAL = 1000 / 10; // 10 frames per second
 
+let highscoreUpdate = () => {
+  document.getElementById("highscore").innerText = playerHighscore;
+};
 function initialization() {
   snake = [
     {
@@ -33,6 +45,7 @@ function initialization() {
   snakeLength = 0;
   fps = 80;
   direction = null;
+  highscoreUpdate();
 }
 
 function randomizeFood() {
@@ -145,10 +158,17 @@ function move() {
     snakePrevY = tempY;
   }
 }
-function gameLoop() {
-  move();
-  draw();
-  checkCollision();
+function gameLoop(timestamp) {
+  if (isGameover) return;
+  const elapsed = timestamp - lastFrameTime;
+
+  if (elapsed > FRAME_INTERVAL) {
+    lastFrameTime = timestamp - (elapsed % FRAME_INTERVAL);
+    move();
+    draw();
+    checkCollision();
+  }
+  requestAnimationFrame(gameLoop);
 }
 
 function startGame() {
@@ -158,7 +178,10 @@ function startGame() {
   document.addEventListener("keydown", handleKeyDown);
   document.addEventListener("swiped", handleSwipe);
   randomizeFood();
-  game = setInterval(gameLoop, fps);
+  // game = setInterval(gameLoop, fps);
+  lastFrameTime = performance.now();
+  isGameover = false;
+  gameLoop();
 }
 function welcomeScreen() {
   canvas.style.display = "none";
@@ -166,12 +189,17 @@ function welcomeScreen() {
 }
 
 async function gameOver() {
-  clearInterval(game);
+  // clearInterval(game);
+  isGameover = true;
   gameOverSound.play();
+  if (snakeLength > playerHighscore) {
+    playerHighscore = snakeLength;
+  }
   await new Promise((r) => setTimeout(r, 500));
 
-  alert("game over!");
+  // alert("game over!");
   document.removeEventListener("keydown", handleKeyDown);
   document.removeEventListener("swiped", handleSwipe);
+  highscoreUpdate();
   welcomeScreen();
 }
