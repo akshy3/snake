@@ -96,16 +96,39 @@ function checkCollision() {
   }
 }
 function handleKeyDown(e) {
-  if (e.key == "ArrowUp" && direction != "down") {
+  let keyDir;
+  switch (e.key) {
+    case "w":
+    case "W":
+    case "ArrowUp":
+      keyDir = "up";
+      break;
+    case "a":
+    case "A":
+    case "ArrowLeft":
+      keyDir = "left";
+      break;
+    case "s":
+    case "S":
+    case "ArrowDown":
+      keyDir = "down";
+      break;
+    case "d":
+    case "D":
+    case "ArrowRight":
+      keyDir = "right";
+      break;
+  }
+  if (keyDir == "up" && direction != "down") {
     direction = "up";
   }
-  if (e.key == "ArrowDown" && direction != "up") {
+  if (keyDir == "down" && direction != "up") {
     direction = "down";
   }
-  if (e.key == "ArrowLeft" && direction != "right") {
+  if (keyDir == "left" && direction != "right") {
     direction = "left";
   }
-  if (e.key == "ArrowRight" && direction != "left") {
+  if (keyDir == "right" && direction != "left") {
     direction = "right";
   }
 }
