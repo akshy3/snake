@@ -1,5 +1,5 @@
 # snake
-A simple snake game in javascript.
+A simple snake game made with vanilla javascript.
 
 Play it from [here](https://akshy3.github.io/snake/). 
 
